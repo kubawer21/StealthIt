@@ -1,0 +1,27 @@
+# Security
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# IDEs
+.vscode/
+.idea/
+
+# Temporary Files
+temp_recording.wav
+*.log
+crash_log.txt
+
+# Build Artifacts
+build/
+dist/
+*.spec
+video_frames/

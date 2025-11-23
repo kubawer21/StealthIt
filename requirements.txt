@@ -1,0 +1,7 @@
+PySide6
+google-generativeai
+sounddevice
+soundfile
+numpy
+Pillow
+python-dotenv
