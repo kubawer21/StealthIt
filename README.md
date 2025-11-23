@@ -40,6 +40,15 @@
     python main.py
     ```
 
+## 🔑 Getting a Gemini API Key
+
+To use the AI features, you'll need a Google Gemini API key.
+
+1.  Go to [Google AI Studio](https://aistudio.google.com/app/apikey).
+2.  Click on **Create API key**.
+3.  Copy the generated key.
+4.  Paste it into the **Settings** menu in StealthIt.
+
 ## ⚙️ Configuration
 
 1.  Open the **Settings** menu by clicking the ⚙️ icon or pressing `Ctrl+,`.
