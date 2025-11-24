@@ -565,8 +565,22 @@ class SettingsDialog(QDialog):
         mode_layout.addWidget(QLabel("Prompt Mode:"))
         self.combo_mode = StealthComboBox()
         self.combo_mode.addItems(config["prompts"]["modes"].keys())
+        
+        # Select active mode
+        active_mode = config.get("active_mode", "General")
+        self.combo_mode.setCurrentText(active_mode)
+        
         self.combo_mode.currentTextChanged.connect(self.load_mode_prompt)
         mode_layout.addWidget(self.combo_mode)
+        
+        # Delete Button
+        self.btn_delete_mode = QPushButton()
+        self.btn_delete_mode.setIcon(qta.icon('fa5s.trash', color='#ef4444'))
+        self.btn_delete_mode.setFixedSize(30, 30)
+        self.btn_delete_mode.setToolTip("Delete Custom Prompt")
+        self.btn_delete_mode.clicked.connect(self.delete_current_mode)
+        mode_layout.addWidget(self.btn_delete_mode)
+        
         prompt_layout.addLayout(mode_layout)
         
         prompt_layout.addWidget(QLabel("System Prompt (Conversation):"))
@@ -600,6 +614,33 @@ class SettingsDialog(QDialog):
     def load_mode_prompt(self, mode_name):
         prompt_text = config["prompts"]["modes"].get(mode_name, "")
         self.system_prompt_input.setPlainText(prompt_text)
+        
+        # Disable delete for default modes
+        defaults = ["General", "Meeting", "Coding"]
+        self.btn_delete_mode.setEnabled(mode_name not in defaults)
+        if mode_name not in defaults:
+             self.btn_delete_mode.setIcon(qta.icon('fa5s.trash', color='#ef4444'))
+        else:
+             self.btn_delete_mode.setIcon(qta.icon('fa5s.trash', color='#4b5563'))
+
+    def delete_current_mode(self):
+        mode_name = self.combo_mode.currentText()
+        defaults = ["General", "Meeting", "Coding"]
+        if mode_name in defaults:
+            QMessageBox.warning(self, "Cannot Delete", f"Cannot delete default mode '{mode_name}'.")
+            return
+            
+        confirm = QMessageBox.question(self, "Confirm Delete", f"Delete prompt '{mode_name}'?", QMessageBox.Yes | QMessageBox.No)
+        if confirm == QMessageBox.Yes:
+            del config["prompts"]["modes"][mode_name]
+            # Reset to General
+            config["active_mode"] = "General"
+            config["prompts"]["system"] = config["prompts"]["modes"]["General"]
+            
+            # Refresh combo
+            self.combo_mode.removeItem(self.combo_mode.currentIndex())
+            self.combo_mode.setCurrentText("General")
+            save_config()
 
     def fetch_ollama_models(self):
         host = self.ollama_host_input.text().strip()
@@ -632,13 +673,17 @@ class SettingsDialog(QDialog):
         config["providers"]["ollama"]["model"] = self.ollama_model_combo.currentText().strip()
         
         # Prompts
-        config["prompts"]["system"] = self.system_prompt_input.toPlainText().strip()
-        config["prompts"]["vision"] = self.vision_prompt_input.toPlainText().strip()
-        
-        # Save current system prompt to current mode
+        # Only update the CURRENTLY SELECTED mode with the text in the box
         current_mode = self.combo_mode.currentText()
+        new_prompt_text = self.system_prompt_input.toPlainText().strip()
+        
         if current_mode:
-            config["prompts"]["modes"][current_mode] = config["prompts"]["system"]
+            config["prompts"]["modes"][current_mode] = new_prompt_text
+            # Also update active system prompt if this is the active mode
+            config["prompts"]["system"] = new_prompt_text
+            config["active_mode"] = current_mode
+            
+        config["prompts"]["vision"] = self.vision_prompt_input.toPlainText().strip()
             
         save_config()
         self.accept()
@@ -1203,7 +1248,7 @@ class MainWindow(QMainWindow):
         # Apply same style to submenu
         gemini_menu.setStyleSheet(menu.styleSheet())
         
-        gemini_models = ["gemini-1.5-flash", "gemini-1.5-pro"]
+        gemini_models = ["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash", "gemini-2.5-flash-lite"]
         current_gemini = config["providers"]["gemini"].get("model", "gemini-2.5-flash")
         
         for model in gemini_models:
@@ -1306,6 +1351,7 @@ class MainWindow(QMainWindow):
         prompt_text = config["prompts"]["modes"].get(mode_name)
         if prompt_text:
             config["prompts"]["system"] = prompt_text
+            config["active_mode"] = mode_name # Track active mode
             # Visual feedback (optional, maybe toast?)
             print(f"Activated mode: {mode_name}")
             
@@ -1707,6 +1753,8 @@ class MainWindow(QMainWindow):
     def open_settings(self):
         dialog = SettingsDialog(self)
         dialog.exec()
+        # Refresh prompt buttons in case of deletion/changes
+        self.refresh_prompt_buttons()
 
     def close_app(self):
         print("Closing app...")

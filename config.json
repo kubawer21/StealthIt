@@ -16,8 +16,8 @@
             "General": "Offer all the help you  can",
             "Meeting": "You are a professional meeting summarizer and action item generator.",
             "Coding": "You are an expert software engineer. Provide code solutions and debugging tips.",
-            "Test": "test",
-            "Another test": "tetetetettegd"
+            "test": "tetetegyuywguw"
         }
-    }
+    },
+    "active_mode": "General"
 }
