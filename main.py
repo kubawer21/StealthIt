@@ -354,17 +354,70 @@ class AudioWorker(QThread):
 
 # --- UI Components ---
 
+class StealthComboBox(QComboBox):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        # Delay applying stealth to ensure view is ready
+        QTimer.singleShot(0, self.apply_stealth)
+
+    def apply_stealth(self):
+        try:
+            view = self.view()
+            if view:
+                popup = view.window()
+                if popup:
+                    hwnd = int(popup.winId())
+                    WDA_EXCLUDEFROMCAPTURE = 0x00000011
+                    user32.SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE)
+        except Exception as e:
+            print(f"StealthComboBox Init Error: {e}")
+
+    def showPopup(self):
+        # Re-apply just in case
+        self.apply_stealth()
+        super().showPopup()
+
+class StealthMenu(QMenu):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        # Apply stealth immediately to the menu window itself
+        try:
+            hwnd = int(self.winId())
+            WDA_EXCLUDEFROMCAPTURE = 0x00000011
+            user32.SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE)
+        except Exception as e:
+            print(f"StealthMenu Init Error: {e}")
+
+    def showEvent(self, event):
+        # Re-apply ensure
+        try:
+            hwnd = int(self.winId())
+            WDA_EXCLUDEFROMCAPTURE = 0x00000011
+            user32.SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE)
+        except Exception:
+            pass
+        super().showEvent(event)
+
 class SettingsDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Settings")
         self.setFixedSize(500, 450)
+        
+        # --- Stealth Mode for Settings Window ---
+        try:
+            hwnd = int(self.winId())
+            WDA_EXCLUDEFROMCAPTURE = 0x00000011
+            user32.SetWindowDisplayAffinity(hwnd, WDA_EXCLUDEFROMCAPTURE)
+        except Exception as e:
+            print(f"Settings Stealth Error: {e}")
+
         # Dark Theme matching the main app
         # Reverted to standard window to ensure opacity
         
         self.setStyleSheet("""
             QDialog {
-                background-color: #141414;
+                background-color: #1a1a1a;
                 color: #e5e7eb;
             }
             QLabel {
@@ -455,7 +508,7 @@ class SettingsDialog(QDialog):
         gen_layout = QFormLayout(self.tab_general)
         
         # Active Provider
-        self.combo_provider = QComboBox()
+        self.combo_provider = StealthComboBox()
         self.combo_provider.addItems(["gemini", "ollama"])
         self.combo_provider.setCurrentText(config.get("active_provider", "gemini"))
         self.combo_provider.currentTextChanged.connect(self.toggle_provider_settings)
@@ -468,7 +521,7 @@ class SettingsDialog(QDialog):
         self.api_key_input.setText(os.environ.get("GEMINI_API_KEY", ""))
         gemini_layout.addRow("Gemini API Key:", self.api_key_input)
         
-        self.gemini_model_combo = QComboBox()
+        self.gemini_model_combo = StealthComboBox()
         self.gemini_model_combo.setEditable(True)
         self.gemini_model_combo.addItems(["gemini-2.5-flash", "gemini-1.5-pro", "gemini-1.5-flash", "gemini-pro"])
         self.gemini_model_combo.setCurrentText(config["providers"]["gemini"].get("model", "gemini-2.5-flash"))
@@ -482,7 +535,7 @@ class SettingsDialog(QDialog):
         self.ollama_host_input.setText(config["providers"]["ollama"].get("host", "http://localhost:11434"))
         ollama_layout.addRow("Ollama Host:", self.ollama_host_input)
         
-        self.ollama_model_combo = QComboBox()
+        self.ollama_model_combo = StealthComboBox()
         self.ollama_model_combo.setEditable(True)
         # Load cached models or default
         cached_models = config["providers"]["ollama"].get("cached_models", ["llama3"])
@@ -510,7 +563,7 @@ class SettingsDialog(QDialog):
         # Mode Selector
         mode_layout = QHBoxLayout()
         mode_layout.addWidget(QLabel("Prompt Mode:"))
-        self.combo_mode = QComboBox()
+        self.combo_mode = StealthComboBox()
         self.combo_mode.addItems(config["prompts"]["modes"].keys())
         self.combo_mode.currentTextChanged.connect(self.load_mode_prompt)
         mode_layout.addWidget(self.combo_mode)
@@ -994,33 +1047,46 @@ class MainWindow(QMainWindow):
         # Shorten model name for display if needed
         display_model = model.replace("gemini-", "").replace("llama", "Llama ")
         
-        self.btn_model = QPushButton(f" {display_model} ▼")
-        self.btn_model.setIcon(qta.icon('fa5s.robot', color='#d1d5db'))
-        self.btn_model.setIconSize(QSize(16, 16))
-        self.btn_model.setCursor(Qt.PointingHandCursor)
-        self.btn_model.clicked.connect(self.show_model_selector)
-        self.btn_model.setStyleSheet("""
-            QPushButton {
+        self.model_chip_widget = QWidget()
+        self.model_chip_widget.setStyleSheet("""
+            QWidget {
                 background-color: rgba(255, 255, 255, 0.1);
                 border-radius: 12px;
-                color: #d1d5db;
-                padding: 4px 12px;
-                font-size: 12px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                text-align: left;
+                border: 1px solid rgba(255, 255, 255, 0.05);
             }
-            QPushButton:hover {
-                background-color: rgba(255, 255, 255, 0.2);
-                color: white;
+            QWidget:hover {
+                background-color: rgba(255, 255, 255, 0.15);
             }
         """)
-        self.toolbar_layout.addWidget(self.btn_model)
+        self.model_chip_layout = QHBoxLayout(self.model_chip_widget)
+        self.model_chip_layout.setContentsMargins(10, 4, 10, 4)
+        self.model_chip_layout.setSpacing(8)
         
+        self.lbl_model_icon = QLabel()
+        self.lbl_model_icon.setPixmap(qta.icon('fa5s.robot', color='#d1d5db').pixmap(14, 14))
+        self.lbl_model_icon.setStyleSheet("background: transparent; border: none;")
+        
+        self.lbl_model_name = QLabel(display_model)
+        self.lbl_model_name.setStyleSheet("color: #d1d5db; font-size: 12px; font-weight: bold; background: transparent; border: none;")
+        
+        self.lbl_model_arrow = QLabel()
+        self.lbl_model_arrow.setPixmap(QIcon("resources/chevron-down.png").pixmap(10, 10))
+        self.lbl_model_arrow.setStyleSheet("background: transparent; border: none;")
+        
+        self.model_chip_layout.addWidget(self.lbl_model_icon)
+        self.model_chip_layout.addWidget(self.lbl_model_name)
+        self.model_chip_layout.addWidget(self.lbl_model_arrow)
+        
+        # Make it clickable
+        self.model_chip_widget.setCursor(Qt.PointingHandCursor)
+        self.model_chip_widget.mousePressEvent = lambda e: self.show_model_selector()
+        
+        self.toolbar_layout.addWidget(self.model_chip_widget)
         self.toolbar_layout.addStretch()
         
         # Send Button
+        # Initialized
         self.btn_send = QPushButton()
-        self.btn_send.setIcon(qta.icon('fa5s.paper-plane', color='white'))
         self.btn_send.setIconSize(QSize(16, 16))
         self.btn_send.setFixedSize(32, 32)
         self.btn_send.setToolTip("Send")
@@ -1087,10 +1153,16 @@ class MainWindow(QMainWindow):
         self.old_pos = None
         self.is_visible = True
         self.current_transcript_item = None
+        self.last_menu_close_time = 0
 
     def show_model_selector(self):
+        # Debounce
+        if time.time() - self.last_menu_close_time < 0.2:
+            return
+
         # Create a menu with available models
-        menu = QMenu(self)
+        menu = StealthMenu(self)
+        menu.aboutToHide.connect(self._update_menu_close_time)
         menu.setStyleSheet("""
             QMenu {
                 background-color: rgba(20, 20, 20, 0.95);
@@ -1154,9 +1226,17 @@ class MainWindow(QMainWindow):
         action_settings.setIcon(qta.icon('fa5s.cog', color='#d1d5db'))
         action_settings.triggered.connect(self.open_settings)
         
-        # Show relative to the button
-        pos = self.btn_model.mapToGlobal(QPoint(0, 0))
-        menu.exec(QPoint(pos.x(), pos.y() - menu.sizeHint().height() - 5)) # Show above button
+        # Show relative to the button (chip widget now)
+        # pos = self.btn_model.mapToGlobal(QPoint(0, 0))
+        # menu.exec(QPoint(pos.x(), pos.y() - menu.sizeHint().height() - 5)) # Show above button
+        
+        # Use popup for better behavior? exec is fine if we debounce.
+        # Align with chip
+        pos = self.model_chip_widget.mapToGlobal(QPoint(0, 0))
+        menu.exec(QPoint(pos.x(), pos.y() - menu.sizeHint().height() - 5))
+
+    def _update_menu_close_time(self):
+        self.last_menu_close_time = time.time()
 
     def switch_model(self, provider, model_name):
         # Validation
@@ -1179,8 +1259,9 @@ class MainWindow(QMainWindow):
         
         # Update Button Text
         display_model = model_name.replace("gemini-", "").replace("llama", "Llama ")
-        self.btn_model.setText(f" {display_model} ▼")
-        self.btn_model.setIcon(qta.icon('fa5s.robot', color='#d1d5db'))
+        # self.btn_model.setText(f" {display_model} ▼")
+        # self.btn_model.setIcon(qta.icon('fa5s.robot', color='#d1d5db'))
+        self.lbl_model_name.setText(display_model)
 
     def set_active_provider(self, provider):
         config["active_provider"] = provider
@@ -1188,8 +1269,9 @@ class MainWindow(QMainWindow):
         # Text update handled in switch_model or init, but if called directly:
         model = config['providers'][provider].get('model', 'Unknown')
         display_model = model.replace("gemini-", "").replace("llama", "Llama ")
-        self.btn_model.setText(f" {display_model} ▼")
-        self.btn_model.setIcon(qta.icon('fa5s.robot', color='#d1d5db'))
+        # self.btn_model.setText(f" {display_model} ▼")
+        # self.btn_model.setIcon(qta.icon('fa5s.robot', color='#d1d5db'))
+        self.lbl_model_name.setText(display_model)
 
     def setup_stealth(self):
         try:
