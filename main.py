@@ -23,7 +23,7 @@ load_dotenv()
 from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                                QHBoxLayout, QTextEdit, QLineEdit, QPushButton, 
                                QLabel, QFrame, QSizePolicy, QScrollArea, QGraphicsDropShadowEffect,
-                               QDialog, QFormLayout, QDialogButtonBox, QTabWidget, QComboBox, QMenu, QMessageBox)
+                               QDialog, QFormLayout, QDialogButtonBox, QTabWidget, QComboBox, QMenu, QMessageBox, QScroller)
 from PySide6.QtCore import Qt, QThread, Signal, QPoint, QSize, QTimer, QPropertyAnimation, QEasingCurve, QRect
 from PySide6.QtGui import QColor, QPalette, QIcon, QFont, QCursor, QPainter, QBrush, QPen, QClipboard, QShortcut, QKeySequence
 
@@ -882,10 +882,10 @@ class ChatBubble(QWidget):
             }}
         """)
         
-        self.label.setSizePolicy(QSizePolicy.Maximum, QSizePolicy.Preferred)
+        self.label.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
         if is_user:
             self.label.setMaximumWidth(350)
-            self.label.setMinimumWidth(50) 
+            self.label.setMinimumWidth(0) # Let it shrink if needed, but Preferred policy will try to fit text
         else:
             self.label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
             self.label.setWordWrap(True)
@@ -1072,6 +1072,10 @@ class MainWindow(QMainWindow):
         self.scroll_layout = QVBoxLayout(self.scroll_content)
         self.scroll_layout.addStretch()
         self.scroll_area.setWidget(self.scroll_content)
+        
+        # Enable Touch Scrolling
+        QScroller.grabGesture(self.scroll_area.viewport(), QScroller.LeftMouseButtonGesture)
+        
         self.chat_layout.addWidget(self.scroll_area)
         
         # Loading Animation (Dynamic, not added initially)
@@ -1092,6 +1096,10 @@ class MainWindow(QMainWindow):
         self.trans_scroll_layout = QVBoxLayout(self.trans_scroll_content)
         self.trans_scroll_layout.addStretch()
         self.trans_scroll_area.setWidget(self.trans_scroll_content)
+        
+        # Enable Touch Scrolling
+        QScroller.grabGesture(self.trans_scroll_area.viewport(), QScroller.LeftMouseButtonGesture)
+        
         self.trans_layout.addWidget(self.trans_scroll_area)
         
         self.tabs.addTab(self.tab_transcription, "Transcription")
